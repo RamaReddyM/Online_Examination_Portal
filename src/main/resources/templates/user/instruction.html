@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instructions | Dashboard </title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="/webjars/AdminLTE/3.0.0/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/webjars/AdminLTE/3.0.0/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition layout-top-nav">
+<div class="wrapper">
+
+    <div th:replace="user/header :: header"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 m-1">
+                        <input type="hidden" id="startTime" th:value="${exam.getStartTimeInMilliseconds()}">
+                        <div class="countdown text-right" style="font-size: 18px;"><b>Starts In :</b> <span id="timer"></span></div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="card shadow-lg border-0 rounded-4">
+                            <div class="card-header bg-gradient-primary text-white text-center rounded-top">
+                              <h4 class="mb-0">Please Read the Instructions Carefully</h4>
+                            </div>
+                            <div class="card-body px-4 py-4 bg-light rounded-bottom">
+                          
+                              <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">📝 General Instructions:</h5>
+                              <ul class="list-unstyled ps-3">
+                                <li class="mb-2"><strong><span th:text="${exam.getInstructions()}"></span></strong></li>
+                                <li class="mb-2">🕒 Total duration of <strong><span th:text="${exam.getTitle()}"></span></strong> exam is <strong><span th:text="${exam.getExamTime()}"></span></strong> minutes.</li>
+                                <li class="mb-2">📊 Marks per Question = <strong><span th:text="${exam.getMarksOfEachQuestion()}"></span></strong> marks.</li>
+                                <li class="mb-2">⚠️ Negative Marking = <strong><span th:text="${exam.getNegativeMarkOfEachQuestion()}"></span></strong> mark(s).</li>
+                                <li class="mb-2">⏱️ Countdown timer will display remaining time. Clock is server-synced.</li>
+                                <li class="mb-2">📋 Question Palette on the left will show your question status.</li>
+                              </ul>
+                          
+                              <h5 class="fw-bold text-dark border-bottom pb-2 mb-3 mt-4">🧭 How to Answer:</h5>
+                              <ul class="ps-3">
+                                <li class="mb-2">🔢 Click a question number in the palette to jump to that question. This won't save your answer.</li>
+                                <li class="mb-2">💾 Use <strong>Save & Next</strong> to save your answer and move forward.</li>
+                                <li class="mb-2">🧹 Use <strong>Reset Answer</strong> to clear your selection before moving on.</li>
+                              </ul>
+                          
+                              <h5 class="fw-bold text-dark border-bottom pb-2 mb-3 mt-4">✅ Answer Status Indicator:</h5>
+                              <ul class="ps-3">
+                                <li class="mb-2 text-success fw-semibold">🟢 Question Answered will show Green</li>
+                                <li class="mb-2 text-danger fw-semibold">🔴 Question Not Answered will show Red</li>
+                                <li class="mb-2">↩️ To deselect an answer, click <strong>Reset Answer</strong>.</li>
+                                <li class="mb-2">🔄 You can switch your answer anytime by selecting a different option.</li>
+                                <li class="mb-2">✅ To finalize your response, you <strong>MUST</strong> click <strong>Save & Next</strong>.</li>
+                              </ul>
+                          
+                              <p class="mt-3 text-muted">You may change your answer at any time before submitting.</p>
+                          
+                              <div class="text-center mt-4">
+                                <a th:href="@{'/'+${exam.getExamCode()}+'/exam'}" id="nextButton" class="btn btn-primary btn-lg px-5 disabled">
+                                  Start Exam <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                              </div>
+                          
+                            </div>
+                          </div>
+                          
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="/webjars/AdminLTE/3.0.0/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/webjars/AdminLTE/3.0.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/webjars/AdminLTE/3.0.0/dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/webjars/AdminLTE/3.0.0/dist/js/demo.js"></script>
+
+<script>
+    // Set the date we're counting down to
+    var remainingExamStartTime=$('#startTime').val()/1000;
+    calculateTime(remainingExamStartTime);
+    // Update the count down every 1 second
+    setInterval(function() {
+        calculateTime(--remainingExamStartTime);
+    }, 1000);
+
+    function calculateTime(time)
+    {
+        var minRemaining=Math.floor(time/60);
+        var secRemaining=Math.floor(time%60);
+        var text=minRemaining+" mins "+secRemaining+" sec";
+        if(Math.floor(time)<=0){
+           $("#nextButton").removeClass("disabled");
+            $("#timer").html("Already started");
+        }else{
+            $("#timer").html(text);
+        }
+    }
+</script>
+</body>
+</html>

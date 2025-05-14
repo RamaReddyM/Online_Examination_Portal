@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Result | Dashboard</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/webjars/AdminLTE/3.0.0/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/webjars/AdminLTE/3.0.0/dist/css/adminlte.min.css">
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f4f6f9;
+    }
+
+    .result-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 650px;
+      margin: 60px auto;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .result-heading {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .score-text {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .score-text span {
+      color: #28a745;
+      font-weight: 700;
+    }
+
+    .stats-list {
+      margin-top: 30px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .stats-list li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 18px;
+      font-size: 1.15rem;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .stats-list li i {
+      font-size: 1.4rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+    }
+
+    .stats-list .total i { background-color: #6c757d; color: white; }
+    .stats-list .attempted i { background-color: #007bff; color: white; }
+    .stats-list .correct i { background-color: #28a745; color: white; }
+    .stats-list .incorrect i { background-color: #dc3545; color: white; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="hold-transition layout-top-nav">
+<div class="wrapper">
+  <div th:replace="user/header :: header"></div>
+
+  <div class="content-wrapper">
+    <div class="content">
+      <div class="container">
+
+        <div class="result-card">
+          <!-- Dynamic Result Heading -->
+          <div class="result-heading" id="resultMessage">
+            <!-- JS handles dynamic message -->
+          </div>
+
+          <!-- Score -->
+          <div class="score-text">
+            You have Scored <span id="scoreCount" th:text="${score}">0</span> Marks
+          </div>
+
+          <!-- Stats -->
+          <ul class="stats-list mt-4">
+            <li class="total">
+              <i class="fas fa-list"></i>
+              <span><span id="totalQ" th:text="${exam.getQuestions().size()}">0</span> Total Questions</span>
+            </li>
+            <li class="attempted">
+              <i class="fas fa-pen"></i>
+              <span><span th:text="${incorrectAnswers + correctAnswers}">0</span> Attempted Questions</span>
+            </li>
+            <li class="correct">
+              <i class="fas fa-check-circle"></i>
+              <span><span th:id="correctA" th:text="${correctAnswers}">0</span> Correct Answers</span>
+            </li>
+            <li class="incorrect">
+              <i class="fas fa-times-circle"></i>
+              <span><span th:text="${incorrectAnswers}">0</span> Incorrect Answers</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+  window.onload = () => {
+    const score = parseInt(document.getElementById('scoreCount').innerText);
+    const correct = parseInt(document.getElementById('correctA').innerText);
+    const total = parseInt(document.getElementById('totalQ').innerText);
+
+    const accuracy = Math.round((correct / total) * 100);
+    const heading = document.getElementById("resultMessage");
+
+    if (accuracy >= 80) {
+      heading.innerHTML = "🎉 <span style='color:#007bff;'>Excellent!</span>";
+      confetti({ particleCount: 150, spread: 100, origin: { y: 0.4 } });
+    } else if (accuracy >= 65) {
+      heading.innerHTML = "👍 <span style='color:#28a745;'>Good Job!</span>";
+    } else {
+      heading.innerHTML = "🙁 <span style='color:#dc3545;'>Nice Try!</span>";
+    }
+
+    // Animated score counting
+    let count = 0;
+    const counter = setInterval(() => {
+      document.getElementById("scoreCount").innerText = count;
+      count++;
+      if (count > score) clearInterval(counter);
+    }, 40);
+  };
+</script>
+
+<!-- Scripts -->
+<script src="/webjars/AdminLTE/3.0.0/plugins/jquery/jquery.min.js"></script>
+<script src="/webjars/AdminLTE/3.0.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/webjars/AdminLTE/3.0.0/dist/js/adminlte.min.js"></script>
+</body>
+</html>

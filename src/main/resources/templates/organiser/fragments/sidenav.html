@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="mySidebar">
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a th:href="@{/organiser/dashboard}" class="brand-link text-center">
+            <span class="brand-text font-weight-bold text-white fs-5">Pydah-E Portal</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- User Panel -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-center align-items-center">
+                <div class="info text-white text-center">
+                    <i class="fas fa-chalkboard-teacher me-2"></i> Hello, Teacher!
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                    <li class="nav-item">
+                        <a href="/organiser/dashboard" class="nav-link">
+                            <i class="nav-icon fas fa-home"></i>
+                            <p class="ms-1">Dashboard</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/organiser/exams" class="nav-link">
+                            <i class="nav-icon fas fa-file-alt"></i>
+                            <p class="ms-1">Exams</p>
+                        </a>
+                    </li>
+
+                    <!-- You can add more menu items here if needed -->
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
+</div>
+</html>
